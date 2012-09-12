@@ -22,9 +22,9 @@ A simple ruby interface to the imgur image hosting service (http://imgur.com). T
   # now you can do something like (if you're using rails):
   <%= image_tag uploaded_img["small_thumbnail"] %>
   
-  # Here's an example using Sinatra and Sequel, requires sinatra-more
+Here's an example using Sinatra and Sequel, requires sinatra-more
   
-  # Everything's included into one action for brevity, although you can probably extract the file functions to a helper for organizational purposes
+Everything's included into one action for brevity, although you can probably extract the file functions to a helper for organizational purposes
   
   post '/upload_photo' do 
     # let's assume we have this is in our form
@@ -44,6 +44,23 @@ A simple ruby interface to the imgur image hosting service (http://imgur.com). T
     redirect '/results'
   end
   
+Here's an example using Rails
+
+```ruby
+class UploadController < ApplicationController
+  IMGUR_API_KEY = 'abc123' # this belongs in an initializer
+  def upload
+    uploader = Imgur::API.new(IMGUR_API_KEY)
+    @uploaded_image = uploader.upload_file(params[:image].tempfile.path)
+  end
+
+end
+
+# app/views/something/index.html.erb
+
+<%= image_tag(@uploaded_image['original_image']) %>
+
+```
     
 == Note on Patches/Pull Requests
  
